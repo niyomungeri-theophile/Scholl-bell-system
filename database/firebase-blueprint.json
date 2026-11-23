@@ -1,0 +1,326 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated school staff or administrator profile.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 3,
+          "maxLength": 200
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "School": {
+      "title": "School",
+      "description": "School campus configuration and active schedule profile.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schoolName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 140
+        },
+        "campusLocation": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 140
+        },
+        "activeProfile": {
+          "type": "string",
+          "enum": ["Studying", "Exams", "Regular", "Exam", "Half-Day"]
+        },
+        "autoRingEnabled": {
+          "type": "boolean"
+        },
+        "masterVolume": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerId",
+        "schoolName",
+        "campusLocation",
+        "activeProfile",
+        "autoRingEnabled",
+        "masterVolume",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "BellSchedule": {
+      "title": "BellSchedule",
+      "description": "Scheduled automatic bell event for a school timetable.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "time": {
+          "type": "string",
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+          "minLength": 5,
+          "maxLength": 5
+        },
+        "endTime": {
+          "type": "string",
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+          "minLength": 5,
+          "maxLength": 5
+        },
+        "profile": {
+          "type": "string",
+          "enum": ["Studying", "Exams", "Regular", "Exam", "Half-Day"]
+        },
+        "zone": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "tone": {
+          "type": "string",
+          "enum": ["brass-bell", "westminster-chime", "gentle-tone", "emergency-alert"]
+        },
+        "durationSec": {
+          "type": "number"
+        },
+        "days": {
+          "type": "array",
+          "description": "Active weekdays for the bell event (1-7 entries)."
+        },
+        "examDate": {
+          "type": "string",
+          "maxLength": 10,
+          "pattern": "^(|\\d{4}-\\d{2}-\\d{2})$",
+          "description": "Optional YYYY-MM-DD date when an exam takes place."
+        },
+        "teacherName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "time",
+        "profile",
+        "zone",
+        "tone",
+        "durationSec",
+        "days",
+        "enabled",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CampusZone": {
+      "title": "CampusZone",
+      "description": "Physical school speaker zone configuration.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "building": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "speakerCount": {
+          "type": "number"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "building",
+        "speakerCount",
+        "enabled",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RingLog": {
+      "title": "RingLog",
+      "description": "Audit log of automatic and manual bell triggers.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "zone": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "tone": {
+          "type": "string",
+          "enum": ["brass-bell", "westminster-chime", "gentle-tone", "emergency-alert"]
+        },
+        "triggerType": {
+          "type": "string",
+          "enum": ["Automatic", "Manual"]
+        },
+        "triggeredAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "title", "zone", "tone", "triggerType", "triggeredAt"]
+    },
+    "SchoolUserAccount": {
+      "title": "SchoolUserAccount",
+      "description": "Assigned school staff account record managed by the company administrator.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schoolId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "username": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 50
+        },
+        "passwordHash": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 200
+        },
+        "role": {
+          "type": "string",
+          "enum": ["school_user"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "schoolId", "username", "passwordHash", "role", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private staff profile documents keyed by Firebase Auth UID."
+    },
+    "/schools/{schoolId}": {
+      "schema": { "$ref": "#/entities/School" },
+      "description": "School workspace root configuration owned by a staff user."
+    },
+    "/schools/{schoolId}/schedules/{scheduleId}": {
+      "schema": { "$ref": "#/entities/BellSchedule" },
+      "description": "Automatic bell schedule entries belonging to a school."
+    },
+    "/schools/{schoolId}/zones/{zoneId}": {
+      "schema": { "$ref": "#/entities/CampusZone" },
+      "description": "Speaker zones configured for a school campus."
+    },
+    "/schools/{schoolId}/logs/{logId}": {
+      "schema": { "$ref": "#/entities/RingLog" },
+      "description": "Historical log of automatic and manual bell rings."
+    },
+    "/schools/{schoolId}/schoolUsers/{staffId}": {
+      "schema": { "$ref": "#/entities/SchoolUserAccount" },
+      "description": "Assigned school staff account records (max 2 per school)."
+    }
+  }
+}

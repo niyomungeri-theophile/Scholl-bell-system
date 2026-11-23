@@ -1,0 +1,227 @@
+{
+  "authSecret": "e61b5ffdfef91cdc524824feac12ef1856d290ea651a2bd404d6d46c3566e869",
+  "users": [
+    {
+      "id": "admin-theophile",
+      "username": "Theophile",
+      "passwordHash": "4b38f031623d7dec4bdcddf1a8158f42:e4ee4c97f9f29c3e7212f78eaebf9b006aabf27a912107f5072baa357417d97c60912ae8ef5e633c2b94c71e33b68271dc378c21075845498ed1b418c03e3d15",
+      "role": "company_admin",
+      "schoolId": null,
+      "createdAtMs": 1794842001912
+    }
+  ],
+  "schools": [
+    {
+      "id": "school-greenhill",
+      "ownerId": "admin-theophile",
+      "schoolName": "Greenhill Academy Campus",
+      "campusLocation": "Kigali Campus · Main Academic Block",
+      "activeProfile": "Studying",
+      "autoRingEnabled": true,
+      "masterVolume": 85,
+      "createdAtMs": 1794842001912,
+      "updatedAtMs": 1794842001912
+    }
+  ],
+  "schedules": [
+    {
+      "title": "Morning Gate & Arrival",
+      "time": "07:30",
+      "endTime": "07:55",
+      "profile": "Studying",
+      "zone": "All Campus",
+      "tone": "westminster-chime",
+      "durationSec": 8,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "",
+      "enabled": true,
+      "id": "seed-school-greenhill-1",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "Morning Assembly",
+      "time": "07:55",
+      "endTime": "08:15",
+      "profile": "Studying",
+      "zone": "All Campus",
+      "tone": "brass-bell",
+      "durationSec": 6,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "",
+      "enabled": true,
+      "id": "seed-school-greenhill-2",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "First Lesson (Period 1)",
+      "time": "08:15",
+      "endTime": "10:15",
+      "profile": "Studying",
+      "zone": "All Campus",
+      "tone": "brass-bell",
+      "durationSec": 5,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "",
+      "enabled": true,
+      "id": "seed-school-greenhill-3",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "Morning Break",
+      "time": "10:15",
+      "endTime": "10:35",
+      "profile": "Studying",
+      "zone": "All Campus",
+      "tone": "gentle-tone",
+      "durationSec": 6,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "",
+      "enabled": true,
+      "id": "seed-school-greenhill-4",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "Midday Lessons",
+      "time": "10:35",
+      "endTime": "12:30",
+      "profile": "Studying",
+      "zone": "All Campus",
+      "tone": "brass-bell",
+      "durationSec": 5,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "",
+      "enabled": true,
+      "id": "seed-school-greenhill-5",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "Lunch Break",
+      "time": "12:30",
+      "endTime": "13:30",
+      "profile": "Studying",
+      "zone": "All Campus",
+      "tone": "westminster-chime",
+      "durationSec": 7,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "",
+      "enabled": true,
+      "id": "seed-school-greenhill-6",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "Afternoon Classes",
+      "time": "13:30",
+      "endTime": "16:00",
+      "profile": "Studying",
+      "zone": "All Campus",
+      "tone": "brass-bell",
+      "durationSec": 5,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "",
+      "enabled": true,
+      "id": "seed-school-greenhill-7",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "Mathematics Paper I",
+      "time": "08:30",
+      "endTime": "10:30",
+      "profile": "Exams",
+      "zone": "All Campus",
+      "tone": "gentle-tone",
+      "durationSec": 5,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "Mr. Jean Bosco Habimana",
+      "enabled": true,
+      "id": "seed-school-greenhill-8",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    },
+    {
+      "title": "Science & Physics Exam",
+      "time": "11:00",
+      "endTime": "13:00",
+      "profile": "Exams",
+      "zone": "All Campus",
+      "tone": "gentle-tone",
+      "durationSec": 5,
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ],
+      "examDate": "",
+      "teacherName": "Ms. Aline Mukamana",
+      "enabled": true,
+      "id": "seed-school-greenhill-9",
+      "schoolId": "school-greenhill",
+      "ownerId": "school-greenhill"
+    }
+  ],
+  "logs": []
+}

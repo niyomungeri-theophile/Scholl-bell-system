@@ -1,0 +1,151 @@
+{
+  "school-50813aea07ca": {
+    "schoolId": "school-50813aea07ca",
+    "schoolName": "RP TUMBA COLLAGE",
+    "activeProfile": "Exams",
+    "autoRingEnabled": false,
+    "config": {
+      "deviceId": "HW-EA07CA",
+      "deviceKey": "bc_hw_b3aff2c36378403c91d569e1",
+      "enabled": true,
+      "relayPin": 2,
+      "defaultDurationSec": 5,
+      "timezoneOffsetMinutes": 120,
+      "updatedAtMs": 1795441509413
+    },
+    "schedules": [
+      {
+        "id": "-P73lbTNcq7Mp9uKUozi",
+        "title": "embended system",
+        "time": "23:12",
+        "endTime": "23:13",
+        "profile": "Exams",
+        "tone": "gentle-tone",
+        "durationSec": 5,
+        "days": [
+          "Sun"
+        ],
+        "examDate": "2026-11-22",
+        "enabled": true
+      }
+    ],
+    "command": {
+      "commandId": "cmd-1795441520747-3ml6fq",
+      "ringNow": true,
+      "title": "Manual School Bell",
+      "tone": "brass-bell",
+      "durationSec": 5,
+      "triggerType": "Manual",
+      "triggeredAtMs": 1795441520752,
+      "expiresAtMs": 1795441525752
+    },
+    "status": {
+      "lastHeartbeatMs": null,
+      "relayState": "IDLE"
+    },
+    "lastSyncedAtMs": 1795441509413
+  },
+  "school-kigali": {
+    "schoolId": "school-kigali",
+    "schoolName": "Registered School",
+    "activeProfile": "Studying",
+    "autoRingEnabled": true,
+    "config": {
+      "deviceId": "HW-KIGALI",
+      "deviceKey": "",
+      "enabled": true,
+      "relayPin": 2,
+      "defaultDurationSec": 5,
+      "timezoneOffsetMinutes": 120,
+      "updatedAtMs": 1795175318433
+    },
+    "schedules": [],
+    "command": {
+      "commandId": "cmd-1795175318433-6x8u3o",
+      "ringNow": true,
+      "title": "GS Kigali Period 1",
+      "tone": "brass-bell",
+      "durationSec": 5,
+      "triggerType": "Manual",
+      "triggeredAtMs": 1795175318433,
+      "expiresAtMs": 1795175323433
+    },
+    "status": {
+      "lastHeartbeatMs": null,
+      "relayState": "RINGING"
+    },
+    "lastSyncedAtMs": 1795175318433
+  },
+  "school-tumba": {
+    "schoolId": "school-tumba",
+    "schoolName": "Registered School",
+    "activeProfile": "Studying",
+    "autoRingEnabled": true,
+    "config": {
+      "deviceId": "HW--TUMBA",
+      "deviceKey": "",
+      "enabled": true,
+      "relayPin": 2,
+      "defaultDurationSec": 5,
+      "timezoneOffsetMinutes": 120,
+      "updatedAtMs": 1795175318464
+    },
+    "schedules": [],
+    "command": {
+      "commandId": "cmd-1795175318464-87ch8c",
+      "ringNow": true,
+      "title": "RP TUMBA COLLAGE Bell",
+      "tone": "brass-bell",
+      "durationSec": 5,
+      "triggerType": "Manual",
+      "triggeredAtMs": 1795175318464,
+      "expiresAtMs": 1795175323464
+    },
+    "status": {
+      "lastHeartbeatMs": 1795175318478,
+      "relayState": "RINGING"
+    },
+    "lastSyncedAtMs": 1795175318464
+  },
+  "school-6accecfd93ad": {
+    "schoolId": "school-6accecfd93ad",
+    "schoolName": "MUSAMBIRA",
+    "activeProfile": "Studying",
+    "autoRingEnabled": false,
+    "config": {
+      "deviceId": "HW-FD93AD",
+      "deviceKey": "bc_hw_cd0b05c04b884cdeb5dd7695",
+      "enabled": true,
+      "relayPin": 2,
+      "defaultDurationSec": 5,
+      "timezoneOffsetMinutes": 120,
+      "updatedAtMs": 1795441501723
+    },
+    "schedules": [
+      {
+        "id": "-P6jRXhv_rMie8a2siSN",
+        "title": "moorning assembly",
+        "time": "18:20",
+        "endTime": "18:21",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "examDate": "",
+        "enabled": true
+      }
+    ],
+    "command": null,
+    "status": {
+      "lastHeartbeatMs": null,
+      "relayState": "IDLE"
+    },
+    "lastSyncedAtMs": 1795441501723
+  }
+}

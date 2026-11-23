@@ -1,0 +1,88 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && ($uid === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))",
+        ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'"
+      }
+    },
+    "schools": {
+      ".read": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'",
+      ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'",
+      "$schoolId": {
+        ".read": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || data.child('ownerId').val() === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))",
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))"
+      }
+    },
+    "schedules": {
+      "$schoolId": {
+        ".read": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || root.child('schools').child($schoolId).child('ownerId').val() === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))",
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || root.child('schools').child($schoolId).child('ownerId').val() === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))"
+      }
+    },
+    "zones": {
+      "$schoolId": {
+        ".read": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || root.child('schools').child($schoolId).child('ownerId').val() === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))",
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || root.child('schools').child($schoolId).child('ownerId').val() === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))"
+      }
+    },
+    "logs": {
+      "$schoolId": {
+        ".read": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || root.child('schools').child($schoolId).child('ownerId').val() === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))",
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('schoolId').val() === $schoolId || root.child('schools').child($schoolId).child('ownerId').val() === auth.uid || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))"
+      }
+    },
+    "schoolUsers": {
+      "$schoolId": {
+        ".read": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'",
+        ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'"
+      }
+    },
+    "publicAnnouncements": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'"
+    },
+    "announcements": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'"
+    },
+    "inquiries": {
+      ".read": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'",
+      "$inquiryId": {
+        ".write": "(!data.exists() && newData.hasChildren(['firstName', 'lastName', 'email', 'subject', 'message', 'createdAtMs'])) || (auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com')"
+      }
+    },
+    "hardwareFeeds": {
+      "$deviceKey": {
+        ".read": "$deviceKey.length >= 16",
+        ".write": "$deviceKey.length >= 16"
+      }
+    },
+    "devices": {
+      ".read": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'",
+      ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'",
+      "$deviceId": {
+        ".read": "auth != null && (data.child('schoolId').val() === root.child('users').child(auth.uid).child('schoolId').val() || (auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'))"
+      }
+    },
+    "esp32Bridge": {
+      "health": {
+        ".read": true,
+        ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'"
+      },
+      "schools": {
+        "$schoolKey": {
+          ".read": "$schoolKey.length >= 2",
+          ".write": "auth != null"
+        }
+      },
+      "devices": {
+        ".read": "auth != null && auth.token.email_verified === true && auth.token.email === 'niyomungeritheophile02@gmail.com'",
+        "$chipId": {
+          ".read": "$chipId.length >= 4",
+          ".write": "$chipId.length >= 4"
+        }
+      }
+    }
+  }
+}

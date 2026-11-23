@@ -1,0 +1,26 @@
+{
+  "school-50813aea07ca": {
+    "id": "school-50813aea07ca",
+    "schoolName": "RP TUMBA COLLAGE",
+    "campusLocation": "RULINDO",
+    "primaryEmail": "theophile01@gmail.com"
+  },
+  "school-6accecfd93ad": {
+    "id": "school-6accecfd93ad",
+    "schoolName": "MUSAMBIRA",
+    "campusLocation": "NYAMAGABE",
+    "primaryEmail": "master@gmail.com"
+  },
+  "school-855b336af934": {
+    "id": "school-855b336af934",
+    "schoolName": "saithe trinithe nyanza TVT SCHOLL",
+    "campusLocation": "NYANZA",
+    "primaryEmail": null
+  },
+  "school-fc47bb75929e": {
+    "id": "school-fc47bb75929e",
+    "schoolName": "BENJAMIN",
+    "campusLocation": "Kigali city",
+    "primaryEmail": "benjamin@gmail.com"
+  }
+}

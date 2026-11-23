@@ -1,0 +1,8 @@
+{
+  "name": "Remix BellCraft — Automatic School Bell System",
+  "description": "Precision automated school bell scheduling, multi-zone campus chimes, staff authentication, and real-time timetable control.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
