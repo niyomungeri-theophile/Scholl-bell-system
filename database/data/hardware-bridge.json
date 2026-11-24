@@ -11,39 +11,133 @@
       "relayPin": 2,
       "defaultDurationSec": 5,
       "timezoneOffsetMinutes": 120,
-      "updatedAtMs": 1795441509413
+      "updatedAtMs": 1795526401574
     },
     "schedules": [
       {
-        "id": "-P73lbTNcq7Mp9uKUozi",
-        "title": "embended system",
-        "time": "23:12",
-        "endTime": "23:13",
+        "id": "-P78zkbq0-flTIXG5Jc4",
+        "title": "wekup time",
+        "time": "05:00",
+        "endTime": "06:00",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "examDate": "",
+        "enabled": true
+      },
+      {
+        "id": "-P79-3lMtarlKTbkF0MQ",
+        "title": "wekup",
+        "time": "08:00",
+        "endTime": "08:45",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ],
+        "examDate": "",
+        "enabled": true
+      },
+      {
+        "id": "-P79-Dw-MvaRDQ9a1330",
+        "title": "moorning assembly",
+        "time": "08:00",
+        "endTime": "09:00",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon"
+        ],
+        "examDate": "",
+        "enabled": true
+      },
+      {
+        "id": "-P7902qPkWrslIU-VzaY",
+        "title": "english",
+        "time": "08:00",
+        "endTime": "09:00",
         "profile": "Exams",
         "tone": "gentle-tone",
         "durationSec": 5,
         "days": [
-          "Sun"
+          "Tue"
         ],
-        "examDate": "2026-11-22",
+        "examDate": "2026-11-24",
+        "enabled": true
+      },
+      {
+        "id": "-P79E9QDXJYrC-YByyLw",
+        "title": "english",
+        "time": "08:00",
+        "endTime": "00:02",
+        "profile": "Exams",
+        "tone": "gentle-tone",
+        "durationSec": 5,
+        "days": [
+          "Tue"
+        ],
+        "examDate": "2026-11-24",
+        "enabled": true
+      },
+      {
+        "id": "-P795clK9kbAI_l54AIh",
+        "title": "moorning assembly",
+        "time": "23:00",
+        "endTime": "23:20",
+        "profile": "Exams",
+        "tone": "gentle-tone",
+        "durationSec": 5,
+        "days": [
+          "Tue"
+        ],
+        "examDate": "2026-11-24",
+        "enabled": true
+      },
+      {
+        "id": "-P798BfqBwUxNLy4gQaK",
+        "title": "break time",
+        "time": "23:00",
+        "endTime": "23:59",
+        "profile": "Exams",
+        "tone": "gentle-tone",
+        "durationSec": 5,
+        "days": [
+          "Tue"
+        ],
+        "examDate": "2026-11-24",
         "enabled": true
       }
     ],
     "command": {
-      "commandId": "cmd-1795441520747-3ml6fq",
+      "commandId": "cmd-1795527472907-4qfnfh",
       "ringNow": true,
       "title": "Manual School Bell",
       "tone": "brass-bell",
       "durationSec": 5,
       "triggerType": "Manual",
-      "triggeredAtMs": 1795441520752,
-      "expiresAtMs": 1795441525752
+      "triggeredAtMs": 1795527472913,
+      "expiresAtMs": 1795527477913
     },
     "status": {
       "lastHeartbeatMs": null,
       "relayState": "IDLE"
     },
-    "lastSyncedAtMs": 1795441509413
+    "lastSyncedAtMs": 1795526401574
   },
   "school-kigali": {
     "schoolId": "school-kigali",

@@ -107,6 +107,7 @@ import {
 import { playSchoolBell, stopAllBells } from '../utils/bellAudio';
 import { fetchNetworkClockOffsetMs, getSyncedNow } from '../utils/networkTime';
 import { downloadAllSchoolsSchedulePdf, downloadSchoolSchedulePdf } from '../utils/schedulePdf';
+import { isOvernightTimeRange } from '../utils/scheduleTime';
 import { BellScheduleModal } from './BellScheduleModal';
 
 interface ConsolePageProps {
@@ -237,6 +238,27 @@ const DASHBOARD_COPY: Record<
 
 const JS_DAY_TO_WEEKDAY: Weekday[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+function getLocalISODate(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+    date.getDate()
+  ).padStart(2, '0')}`;
+}
+
+function scheduleStartsOnDate(schedule: BellSchedule, date: Date): boolean {
+  if (schedule.examDate) return schedule.examDate === getLocalISODate(date);
+  return schedule.days.includes(JS_DAY_TO_WEEKDAY[date.getDay()]);
+}
+
+function getExamEndDateISO(schedule: BellSchedule): string {
+  if (!schedule.examDate) return '';
+  const endDate = new Date(`${schedule.examDate}T12:00:00`);
+  if (Number.isNaN(endDate.getTime())) return schedule.examDate;
+  if (isOvernightTimeRange(schedule.time, schedule.endTime)) {
+    endDate.setDate(endDate.getDate() + 1);
+  }
+  return getLocalISODate(endDate);
+}
+
 const PROFILE_LABEL: Record<ScheduleProfile, string> = {
   Studying: 'For Studying',
   Exams: 'Exams',
@@ -257,8 +279,9 @@ function formatDurationSpan(startHHMM: string, endHHMM?: string): string {
   const [sh, sm] = startHHMM.split(':').map(Number);
   const [eh, em] = endHHMM.split(':').map(Number);
   if (Number.isNaN(sh) || Number.isNaN(sm) || Number.isNaN(eh) || Number.isNaN(em)) return '';
-  const diffMin = eh * 60 + em - (sh * 60 + sm);
-  if (diffMin <= 0) return '';
+  let diffMin = eh * 60 + em - (sh * 60 + sm);
+  if (diffMin < 0) diffMin += 24 * 60;
+  if (diffMin === 0) return '';
   const hrs = Math.floor(diffMin / 60);
   const mins = diffMin % 60;
   if (hrs > 0 && mins > 0) return `${hrs}h ${mins}m`;
@@ -1088,8 +1111,9 @@ export function ConsolePage({
 
       const ss = current.getSeconds();
       if (ss <= 5) {
-        const todayWeekday = JS_DAY_TO_WEEKDAY[current.getDay()];
-        const todayISO = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}-${String(current.getDate()).padStart(2, '0')}`;
+        const todayISO = getLocalISODate(current);
+        const previousDate = new Date(current);
+        previousDate.setDate(previousDate.getDate() - 1);
 
         const processSchoolAutoBells = (
           targetSchool: SchoolConfig,
@@ -1097,20 +1121,16 @@ export function ConsolePage({
           isCurrentlyViewedSchool: boolean
         ) => {
           if (!targetSchool.autoRingEnabled) return;
-          const activeToday = targetSchedules.filter((item) => {
-            if (!item.enabled || item.profile !== targetSchool.activeProfile) return false;
-            // Pre-flight expiration guard: examDate must exactly equal todayISO (expired dates never trigger)
-            if (item.examDate) {
-              return item.examDate === todayISO;
-            }
-            return item.days.includes(todayWeekday);
-          });
-
-          activeToday.forEach((bell) => {
+          const processBell = (bell: BellSchedule) => {
             const hardwareEnabled = targetSchool.hardware?.config?.enabled ?? true;
             const deviceKey = targetSchool.hardware?.config?.deviceKey;
+            const overnight = isOvernightTimeRange(bell.time, bell.endTime);
+            const startsToday = scheduleStartsOnDate(bell, current);
+            const endsToday = scheduleStartsOnDate(bell, overnight ? previousDate : current);
             const startEligible =
-              bell.time === hhmm && (!bell.endTime || bell.endTime <= bell.time || hhmm < bell.endTime);
+              startsToday &&
+              bell.time === hhmm &&
+              (!bell.endTime || bell.endTime <= bell.time || hhmm < bell.endTime);
 
             if (startEligible) {
               const triggerKey = `${targetSchool.id}-${current.toDateString()}-${bell.id}-start-${hhmm}`;
@@ -1148,7 +1168,12 @@ export function ConsolePage({
                   })
                   .catch(() => {});
               }
-            } else if (bell.endTime && bell.endTime === hhmm && bell.endTime !== bell.time) {
+            } else if (
+              endsToday &&
+              bell.endTime &&
+              bell.endTime === hhmm &&
+              bell.endTime !== bell.time
+            ) {
               const endTitle = `${bell.title} (End)`;
               const triggerKey = `${targetSchool.id}-${current.toDateString()}-${bell.id}-end-${hhmm}`;
               if (!lastAutoTriggeredKeysRef.current.has(triggerKey)) {
@@ -1186,7 +1211,13 @@ export function ConsolePage({
                   .catch(() => {});
               }
             }
-          });
+          };
+          targetSchedules
+            .filter(
+              (item) =>
+                item.enabled && item.profile === targetSchool.activeProfile
+            )
+            .forEach(processBell);
         };
 
         if (activeSchool) {
@@ -1206,7 +1237,10 @@ export function ConsolePage({
 
   const activeProfile: ScheduleProfile = schoolConfig?.activeProfile ?? 'Studying';
   const todayWeekday = JS_DAY_TO_WEEKDAY[now.getDay()];
-  const todayISO = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const todayISO = getLocalISODate(now);
+  const previousDate = new Date(now);
+  previousDate.setDate(previousDate.getDate() - 1);
+  const previousISO = getLocalISODate(previousDate);
   const currentHHMM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
   const activeTodaySchedules = useMemo(() => {
@@ -1215,7 +1249,7 @@ export function ConsolePage({
         (s) =>
           s.enabled &&
           s.profile === activeProfile &&
-          (s.examDate ? s.examDate === todayISO : s.days.includes(todayWeekday))
+          scheduleStartsOnDate(s, now)
       )
       .sort(
         (a, b) =>
@@ -1223,16 +1257,33 @@ export function ConsolePage({
       );
   }, [schedules, activeProfile, todayWeekday, todayISO]);
 
+  const overnightFromYesterday = useMemo(
+    () =>
+      schedules.filter(
+        (s) =>
+          s.enabled &&
+          s.profile === activeProfile &&
+          isOvernightTimeRange(s.time, s.endTime) &&
+          scheduleStartsOnDate(s, previousDate)
+      ),
+    [schedules, activeProfile, previousISO]
+  );
+
   const currentActivity = useMemo(() => {
-    const matching = activeTodaySchedules.filter((s) => {
+    const ongoingFromYesterday = overnightFromYesterday.filter(
+      (s) => currentHHMM < s.endTime
+    );
+    const matchingToday = activeTodaySchedules.filter((s) => {
       if (s.time > currentHHMM) return false;
+      if (isOvernightTimeRange(s.time, s.endTime)) return true;
       if (s.endTime && s.endTime > s.time) {
         return currentHHMM < s.endTime;
       }
       return currentHHMM === s.time;
     });
+    const matching = [...ongoingFromYesterday, ...matchingToday];
     return matching.length > 0 ? matching[matching.length - 1] : null;
-  }, [activeTodaySchedules, currentHHMM]);
+  }, [activeTodaySchedules, overnightFromYesterday, currentHHMM]);
 
   const nextScheduledBell = useMemo(() => {
     return activeTodaySchedules.find((s) => s.time > currentHHMM) ?? null;
@@ -1282,14 +1333,26 @@ export function ConsolePage({
   const dayOverview = useMemo(() => {
     if (filteredSchedules.length === 0) return null;
     const firstStart = filteredSchedules[0].time;
-    const lastEnd = filteredSchedules.reduce(
-      (maxEnd, item) => (item.endTime && item.endTime > maxEnd ? item.endTime : maxEnd),
-      filteredSchedules[0].endTime || filteredSchedules[0].time
-    );
+    const lastSchedule = filteredSchedules.reduce((latest, item) => {
+      const itemEnd = item.endTime || item.time;
+      const latestEnd = latest.endTime || latest.time;
+      const itemEndMinutes =
+        Number(itemEnd.slice(0, 2)) * 60 +
+        Number(itemEnd.slice(3, 5)) +
+        (isOvernightTimeRange(item.time, itemEnd) ? 24 * 60 : 0);
+      const latestEndMinutes =
+        Number(latestEnd.slice(0, 2)) * 60 +
+        Number(latestEnd.slice(3, 5)) +
+        (isOvernightTimeRange(latest.time, latestEnd) ? 24 * 60 : 0);
+      return itemEndMinutes > latestEndMinutes ? item : latest;
+    }, filteredSchedules[0]);
+    const lastEnd = lastSchedule.endTime || lastSchedule.time;
+    const endsNextDay = isOvernightTimeRange(lastSchedule.time, lastEnd);
     const enabledCount = filteredSchedules.filter((s) => s.enabled).length;
     return {
       firstStart,
       lastEnd,
+      endsNextDay,
       totalCount: filteredSchedules.length,
       enabledCount,
     };
@@ -3480,6 +3543,12 @@ export function ConsolePage({
                           </p>
                           <p className="font-mono text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-white tabular-nums tracking-tight leading-none mt-1.5">
                             {currentActivity.endTime || currentActivity.time}
+                            {isOvernightTimeRange(
+                              currentActivity.time,
+                              currentActivity.endTime
+                            )
+                              ? ' (+1 day)'
+                              : ''}
                           </p>
                         </div>
                       </div>
@@ -3578,6 +3647,12 @@ export function ConsolePage({
                           </p>
                           <p className="font-mono text-3xl xl:text-4xl font-extrabold text-slate-900 dark:text-white tabular-nums tracking-tight leading-none mt-1.5">
                             {nextScheduledBell.endTime || nextScheduledBell.time}
+                            {isOvernightTimeRange(
+                              nextScheduledBell.time,
+                              nextScheduledBell.endTime
+                            )
+                              ? ' (+1 day)'
+                              : ''}
                           </p>
                         </div>
                       </div>
@@ -4711,6 +4786,7 @@ export function ConsolePage({
                       Day Span:{' '}
                       <strong className="font-mono tabular-nums text-slate-900 dark:text-white">
                         {dayOverview.firstStart} – {dayOverview.lastEnd}
+                        {dayOverview.endsNextDay ? ' (+1 day)' : ''}
                       </strong>
                     </span>
                     <span className="text-slate-400" aria-hidden="true">
@@ -4791,11 +4867,14 @@ export function ConsolePage({
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800/70 text-sm">
                     {filteredSchedules.map((item, idx) => {
                       const durationLabel = formatDurationSpan(item.time, item.endTime);
+                      const overnight = isOvernightTimeRange(item.time, item.endTime);
+                      const examEndDate = getExamEndDateISO(item);
                       const isExpiredExam =
                         item.profile === 'Exams' &&
                         Boolean(item.examDate) &&
-                        (item.examDate! < todayISO ||
-                          (item.examDate === todayISO && (item.endTime || item.time) <= currentHHMM));
+                        (examEndDate < todayISO ||
+                          (examEndDate === todayISO &&
+                            (item.endTime || item.time) <= currentHHMM));
                       return (
                         <tr
                           key={item.id}
@@ -4809,6 +4888,7 @@ export function ConsolePage({
                           <td className="py-3.5 px-4 whitespace-nowrap">
                             <p className="font-mono text-base font-bold text-slate-900 dark:text-white tabular-nums">
                               {item.time} – {item.endTime || item.time}
+                              {overnight ? ' (+1 day)' : ''}
                             </p>
                             {durationLabel && (
                               <p className="text-xs text-slate-500 dark:text-slate-400 tabular-nums">
@@ -6479,12 +6559,21 @@ void checkOfflineSchedule() {
 
   struct tm t;
   localtime_r(&nowEpoch, &t);
+  struct tm previousDay = t;
+  previousDay.tm_mday -= 1;
+  previousDay.tm_hour = 12;
+  previousDay.tm_min = 0;
+  previousDay.tm_sec = 0;
+  time_t previousDayEpoch = mktime(&previousDay);
+  localtime_r(&previousDayEpoch, &previousDay);
 
   static const char* DAY_NAMES[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
   String todayDay = String(DAY_NAMES[t.tm_wday]);
 
   char dateBuf[11];
   snprintf(dateBuf, sizeof(dateBuf), "%04d-%02d-%02d", t.tm_year + 1900, t.tm_mon + 1, t.tm_mday);
+  char previousDateBuf[11];
+  snprintf(previousDateBuf, sizeof(previousDateBuf), "%04d-%02d-%02d", previousDay.tm_year + 1900, previousDay.tm_mon + 1, previousDay.tm_mday);
 
   char hmBuf[6];
   snprintf(hmBuf, sizeof(hmBuf), "%02d:%02d", t.tm_hour, t.tm_min);
@@ -6516,19 +6605,22 @@ void checkOfflineSchedule() {
     if (!s.enabled) continue;
     if (strcmp(s.profile, activeProfile.c_str()) != 0) continue;
 
-    // Pre-flight date/day verification: expired exam dates are strictly ignored
-    bool dayMatches = false;
+    // Day selections represent the start date; overnight end bells use the previous start date.
+    bool overnight = strlen(s.endTime) == 5 && strcmp(s.endTime, s.time) < 0;
+    bool startDayMatches = false;
+    bool endDayMatches = false;
     if (strlen(s.examDate) > 0) {
-      dayMatches = (strcmp(s.examDate, dateBuf) == 0);
+      startDayMatches = (strcmp(s.examDate, dateBuf) == 0);
+      endDayMatches = (strcmp(s.examDate, overnight ? previousDateBuf : dateBuf) == 0);
     } else {
-      dayMatches = ((s.dayMask & (1 << t.tm_wday)) != 0);
+      startDayMatches = ((s.dayMask & (1 << t.tm_wday)) != 0);
+      endDayMatches = ((s.dayMask & (1 << (overnight ? previousDay.tm_wday : t.tm_wday))) != 0);
     }
-    if (!dayMatches) continue;
 
     const char* triggerKind = "";
-    if (strcmp(s.time, hmBuf) == 0) {
+    if (startDayMatches && strcmp(s.time, hmBuf) == 0) {
       triggerKind = "start";
-    } else if (strlen(s.endTime) == 5 && strcmp(s.endTime, s.time) != 0 && strcmp(s.endTime, hmBuf) == 0) {
+    } else if (endDayMatches && strlen(s.endTime) == 5 && strcmp(s.endTime, s.time) != 0 && strcmp(s.endTime, hmBuf) == 0) {
       triggerKind = "end";
     }
 

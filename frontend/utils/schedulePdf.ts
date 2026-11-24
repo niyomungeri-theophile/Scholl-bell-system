@@ -1,6 +1,7 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { BellSchedule, SCHOOL_WEEKDAYS, SchoolConfig, WEEKDAYS, Weekday } from '../types';
+import { isOvernightTimeRange } from './scheduleTime';
 
 type JsPdfWithAutoTable = jsPDF & {
   lastAutoTable?: {
@@ -53,7 +54,9 @@ function getActiveDayColumns(schedules: BellSchedule[]): Weekday[] {
 function formatTimeRange(item: BellSchedule): string {
   const start = item.time || '--:--';
   const end = item.endTime && item.endTime !== item.time ? item.endTime : '';
-  return end ? `${start} - ${end}` : start;
+  return end
+    ? `${start} - ${end}${isOvernightTimeRange(start, end) ? ' (+1 day)' : ''}`
+    : start;
 }
 
 function renderSchoolHeader(

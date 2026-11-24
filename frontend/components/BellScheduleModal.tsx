@@ -10,6 +10,7 @@ import {
   WEEKDAYS,
   Weekday,
 } from '../types';
+import { isOvernightTimeRange } from '../utils/scheduleTime';
 
 interface BellScheduleModalProps {
   isOpen: boolean;
@@ -135,8 +136,8 @@ export function BellScheduleModal({
       return;
     }
 
-    if (endTime <= time) {
-      setErrorMsg('End time must be after start time.');
+    if (endTime === time) {
+      setErrorMsg('End time must be different from start time.');
       return;
     }
 
@@ -159,7 +160,11 @@ export function BellScheduleModal({
           );
           return;
         }
-        if (examDate === todayISO && endTime <= nowHHMM) {
+        if (
+          examDate === todayISO &&
+          !isOvernightTimeRange(time, endTime) &&
+          endTime <= nowHHMM
+        ) {
           setErrorMsg(
             `Expired exam time: ${endTime} has already passed current time (${nowHHMM}). Choose a future time so expired activities do not trigger.`
           );
@@ -367,12 +372,18 @@ export function BellScheduleModal({
               </label>
               <input
                 id="bell-time"
-                type="time"
+                type="text"
+                inputMode="numeric"
+                maxLength={5}
+                placeholder="23:00"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full px-3.5 py-2.5 text-sm font-mono tabular-nums border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#060B19] text-slate-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
+              <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                24-hour time, e.g. 23:00 (11:00 PM)
+              </p>
             </div>
 
             <div>
@@ -384,7 +395,10 @@ export function BellScheduleModal({
               </label>
               <input
                 id="bell-end-time"
-                type="time"
+                type="text"
+                inputMode="numeric"
+                maxLength={5}
+                placeholder="23:00"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
                 className="w-full px-3.5 py-2.5 text-sm font-mono tabular-nums border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#060B19] text-slate-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -392,18 +406,33 @@ export function BellScheduleModal({
               />
             </div>
           </div>
+          <p className="-mt-3 text-[11px] text-slate-500 dark:text-slate-400">
+            If the end time is earlier than the start time, it ends the next day (e.g. 23:00–00:01).
+          </p>
 
           {(() => {
             const todayISO = getTodayLocalISO();
             const nowHHMM = getCurrentLocalHHMM();
-            if (profile === 'Exams' && examDate && (examDate < todayISO || (examDate === todayISO && endTime <= nowHHMM))) {
+            if (
+              profile === 'Exams' &&
+              examDate &&
+              (examDate < todayISO ||
+                (examDate === todayISO &&
+                  !isOvernightTimeRange(time, endTime) &&
+                  endTime <= nowHHMM))
+            ) {
               return (
                 <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs text-amber-800 dark:text-amber-200">
                   Pre-flight time check: {examDate} ({time}–{endTime}) is already past current time ({nowHHMM}). Choose a future date/time before saving.
                 </div>
               );
             }
-            if (profile === 'Studying' && TIME_PATTERN.test(endTime) && endTime <= nowHHMM) {
+            if (
+              profile === 'Studying' &&
+              TIME_PATTERN.test(endTime) &&
+              !isOvernightTimeRange(time, endTime) &&
+              endTime <= nowHHMM
+            ) {
               return (
                 <p className="text-[11px] text-amber-700 dark:text-amber-300">
                   Note: {endTime} is already past today ({nowHHMM}) — it will not trigger today, and will ring on the next scheduled weekday.

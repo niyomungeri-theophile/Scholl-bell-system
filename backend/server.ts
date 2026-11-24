@@ -270,27 +270,38 @@ function evaluateAutomaticSchedules(): void {
     const hh = String(localDate.getUTCHours()).padStart(2, '0');
     const mm = String(localDate.getUTCMinutes()).padStart(2, '0');
     const hhmm = `${hh}:${mm}`;
-    const todayISO = `${localDate.getUTCFullYear()}-${String(localDate.getUTCMonth() + 1).padStart(
-      2,
-      '0'
-    )}-${String(localDate.getUTCDate()).padStart(2, '0')}`;
-    const todayWeekday = WEEKDAY_NAMES[localDate.getUTCDay()];
+    const formatDate = (date: Date) =>
+      `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(
+        date.getUTCDate()
+      ).padStart(2, '0')}`;
+    const todayISO = formatDate(localDate);
+    const previousDate = new Date(localDate);
+    previousDate.setUTCDate(previousDate.getUTCDate() - 1);
+    const isScheduledOnDate = (slot: SyncedScheduleSlot, date: Date) => {
+      if (slot.examDate) return slot.examDate === formatDate(date);
+      return slot.days.includes(WEEKDAY_NAMES[date.getUTCDay()]);
+    };
 
     const matchingSlots = record.schedules.filter(
-      (slot) =>
-        slot.enabled &&
-        slot.profile === record.activeProfile &&
-        (slot.examDate ? slot.examDate === todayISO : slot.days.includes(todayWeekday))
+      (slot) => slot.enabled && slot.profile === record.activeProfile
     );
 
     matchingSlots.forEach((slot) => {
       let titleToRing: string | null = null;
       let dedupeKey: string | null = null;
+      const overnight = Boolean(slot.endTime && slot.endTime < slot.time);
+      const startsToday = isScheduledOnDate(slot, localDate);
+      const endsToday = isScheduledOnDate(slot, overnight ? previousDate : localDate);
 
-      if (slot.time === hhmm) {
+      if (startsToday && slot.time === hhmm) {
         titleToRing = slot.title;
         dedupeKey = `${record.schoolId}-${todayISO}-${slot.id}-start-${hhmm}`;
-      } else if (slot.endTime && slot.endTime === hhmm && slot.endTime !== slot.time) {
+      } else if (
+        endsToday &&
+        slot.endTime &&
+        slot.endTime === hhmm &&
+        slot.endTime !== slot.time
+      ) {
         titleToRing = `${slot.title} (End)`;
         dedupeKey = `${record.schoolId}-${todayISO}-${slot.id}-end-${hhmm}`;
       }
