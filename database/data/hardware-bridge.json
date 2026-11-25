@@ -3,7 +3,7 @@
     "schoolId": "school-50813aea07ca",
     "schoolName": "RP TUMBA COLLAGE",
     "activeProfile": "Exams",
-    "autoRingEnabled": false,
+    "autoRingEnabled": true,
     "config": {
       "deviceId": "HW-EA07CA",
       "deviceKey": "bc_hw_b3aff2c36378403c91d569e1",
@@ -11,14 +11,14 @@
       "relayPin": 2,
       "defaultDurationSec": 5,
       "timezoneOffsetMinutes": 120,
-      "updatedAtMs": 1795526401574
+      "updatedAtMs": 1795614624979
     },
     "schedules": [
       {
-        "id": "-P78zkbq0-flTIXG5Jc4",
+        "id": "-P7DdYQUexy8q64tFOHP",
         "title": "wekup time",
         "time": "05:00",
-        "endTime": "06:00",
+        "endTime": "06:30",
         "profile": "Studying",
         "tone": "brass-bell",
         "durationSec": 5,
@@ -33,10 +33,10 @@
         "enabled": true
       },
       {
-        "id": "-P79-3lMtarlKTbkF0MQ",
-        "title": "wekup",
-        "time": "08:00",
-        "endTime": "08:45",
+        "id": "-P7Df9M94RsYiYQxEqbf",
+        "title": "attending claas  from home",
+        "time": "06:30",
+        "endTime": "07:00",
         "profile": "Studying",
         "tone": "brass-bell",
         "durationSec": 5,
@@ -45,99 +45,203 @@
           "Tue",
           "Wed",
           "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "Fri"
         ],
         "examDate": "",
         "enabled": true
       },
       {
-        "id": "-P79-Dw-MvaRDQ9a1330",
-        "title": "moorning assembly",
-        "time": "08:00",
-        "endTime": "09:00",
+        "id": "-P7G6_KFPwrfu6sJbFzW",
+        "title": "GOING TO SCHOOL",
+        "time": "07:00",
+        "endTime": "07:17",
         "profile": "Studying",
         "tone": "brass-bell",
         "durationSec": 5,
         "days": [
-          "Mon"
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
         ],
         "examDate": "",
         "enabled": true
       },
       {
-        "id": "-P7902qPkWrslIU-VzaY",
-        "title": "english",
+        "id": "-P7Df_X9z5KRB0cZ_o_v",
+        "title": "Wash the dishes.",
         "time": "08:00",
-        "endTime": "09:00",
-        "profile": "Exams",
-        "tone": "gentle-tone",
+        "endTime": "08:30",
+        "profile": "Studying",
+        "tone": "brass-bell",
         "durationSec": 5,
         "days": [
-          "Tue"
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
         ],
-        "examDate": "2026-11-24",
+        "examDate": "",
         "enabled": true
       },
       {
-        "id": "-P79E9QDXJYrC-YByyLw",
-        "title": "english",
-        "time": "08:00",
-        "endTime": "00:02",
-        "profile": "Exams",
-        "tone": "gentle-tone",
+        "id": "-P7Dfm9Yt92I_qlGdot6",
+        "title": "start kooking",
+        "time": "09:24",
+        "endTime": "10:58",
+        "profile": "Studying",
+        "tone": "brass-bell",
         "durationSec": 5,
         "days": [
-          "Tue"
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
         ],
-        "examDate": "2026-11-24",
+        "examDate": "",
         "enabled": true
       },
       {
-        "id": "-P795clK9kbAI_l54AIh",
-        "title": "moorning assembly",
-        "time": "23:00",
-        "endTime": "23:20",
-        "profile": "Exams",
-        "tone": "gentle-tone",
+        "id": "-P7Dg3PI6zSJdFvOTs1L",
+        "title": "Eating time",
+        "time": "12:02",
+        "endTime": "12:30",
+        "profile": "Studying",
+        "tone": "brass-bell",
         "durationSec": 5,
         "days": [
-          "Tue"
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
         ],
-        "examDate": "2026-11-24",
+        "examDate": "",
         "enabled": true
       },
       {
-        "id": "-P798BfqBwUxNLy4gQaK",
+        "id": "-P7DgH5nAuP-Rf8kFy-L",
         "title": "break time",
-        "time": "23:00",
-        "endTime": "23:59",
+        "time": "12:30",
+        "endTime": "15:00",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "examDate": "",
+        "enabled": true
+      },
+      {
+        "id": "-P7DgeH9TB5RUq3Fks82",
+        "title": "Starting kooking evening",
+        "time": "15:30",
+        "endTime": "17:50",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "examDate": "",
+        "enabled": true
+      },
+      {
+        "id": "-P7Gx9k8CxNhcb0fzBTl",
+        "title": "english",
+        "time": "15:50",
+        "endTime": "15:52",
         "profile": "Exams",
         "tone": "gentle-tone",
         "durationSec": 5,
         "days": [
-          "Tue"
+          "Wed"
         ],
-        "examDate": "2026-11-24",
+        "examDate": "2026-11-25",
+        "enabled": true
+      },
+      {
+        "id": "-P7DhCnfN78ZP3JkGJPF",
+        "title": "Dinner periode",
+        "time": "19:00",
+        "endTime": "19:30",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "examDate": "",
+        "enabled": true
+      },
+      {
+        "id": "-P7Dhg4fRom0JaTsotG-",
+        "title": "leraxing time",
+        "time": "19:30",
+        "endTime": "19:59",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "examDate": "",
+        "enabled": true
+      },
+      {
+        "id": "-P7Di0uxSgnD2W86zofP",
+        "title": "Sleeping time",
+        "time": "20:00",
+        "endTime": "04:59",
+        "profile": "Studying",
+        "tone": "brass-bell",
+        "durationSec": 5,
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "examDate": "",
         "enabled": true
       }
     ],
     "command": {
-      "commandId": "cmd-1795527472907-4qfnfh",
+      "commandId": "auto-school-50813aea07ca-2026-11-25--P7Gx9k8CxNhcb0fzBTl-end-1552",
       "ringNow": true,
-      "title": "Manual School Bell",
-      "tone": "brass-bell",
+      "title": "english (End)",
+      "tone": "gentle-tone",
       "durationSec": 5,
-      "triggerType": "Manual",
-      "triggeredAtMs": 1795527472913,
-      "expiresAtMs": 1795527477913
+      "triggerType": "Automatic",
+      "triggeredAtMs": 1795614720859,
+      "expiresAtMs": 1795614725859
     },
     "status": {
       "lastHeartbeatMs": null,
       "relayState": "IDLE"
     },
-    "lastSyncedAtMs": 1795526401574
+    "lastSyncedAtMs": 1795614624979
   },
   "school-kigali": {
     "schoolId": "school-kigali",

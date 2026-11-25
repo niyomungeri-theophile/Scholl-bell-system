@@ -1212,12 +1212,7 @@ export function ConsolePage({
               }
             }
           };
-          targetSchedules
-            .filter(
-              (item) =>
-                item.enabled && item.profile === targetSchool.activeProfile
-            )
-            .forEach(processBell);
+          targetSchedules.filter((item) => item.enabled).forEach(processBell);
         };
 
         if (activeSchool) {
@@ -1248,25 +1243,23 @@ export function ConsolePage({
       .filter(
         (s) =>
           s.enabled &&
-          s.profile === activeProfile &&
           scheduleStartsOnDate(s, now)
       )
       .sort(
         (a, b) =>
           a.time.localeCompare(b.time) || (a.endTime || '').localeCompare(b.endTime || '')
       );
-  }, [schedules, activeProfile, todayWeekday, todayISO]);
+  }, [schedules, todayWeekday, todayISO]);
 
   const overnightFromYesterday = useMemo(
     () =>
       schedules.filter(
         (s) =>
           s.enabled &&
-          s.profile === activeProfile &&
           isOvernightTimeRange(s.time, s.endTime) &&
           scheduleStartsOnDate(s, previousDate)
       ),
-    [schedules, activeProfile, previousISO]
+    [schedules, previousISO]
   );
 
   const currentActivity = useMemo(() => {
@@ -1303,18 +1296,16 @@ export function ConsolePage({
       Sun: 0,
     };
     schedules.forEach((item) => {
-      if (item.profile !== activeProfile) return;
       WEEKDAYS.forEach((day) => {
         if (item.days.includes(day)) counts[day] += 1;
       });
     });
     return counts;
-  }, [schedules, activeProfile]);
+  }, [schedules]);
 
   const filteredSchedules = useMemo(() => {
     return schedules
       .filter((item) => {
-        if (item.profile !== activeProfile) return false;
         if (selectedDay !== 'All' && !item.days.includes(selectedDay)) return false;
 
         const q = searchQuery.trim().toLowerCase();
@@ -1328,7 +1319,7 @@ export function ConsolePage({
         );
       })
       .sort((a, b) => a.time.localeCompare(b.time) || a.endTime.localeCompare(b.endTime));
-  }, [schedules, activeProfile, selectedDay, searchQuery]);
+  }, [schedules, selectedDay, searchQuery]);
 
   const dayOverview = useMemo(() => {
     if (filteredSchedules.length === 0) return null;
@@ -2895,7 +2886,7 @@ export function ConsolePage({
 
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3.5 px-3.5 rounded-xl bg-slate-50 dark:bg-[#060B19] border border-slate-100 dark:border-slate-800/80 text-xs mb-5">
                           <div>
-                            <p className="text-slate-400 dark:text-slate-500">Profile</p>
+                            <p className="text-slate-400 dark:text-slate-500">New schedule type</p>
                             <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
                               {PROFILE_LABEL[school.activeProfile]}
                             </p>
@@ -3411,7 +3402,7 @@ export function ConsolePage({
                   </p>
                   <p className="text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-x-2 gap-y-0.5">
                     <span>
-                      Profile:{' '}
+                      New schedule type:{' '}
                       <strong className="text-slate-800 dark:text-slate-200">
                         {PROFILE_LABEL[activeProfile]}
                       </strong>
@@ -3567,8 +3558,7 @@ export function ConsolePage({
                         {dCopy.noCurrentActivityAt}{' '}
                         <span className="font-mono font-semibold text-slate-700 dark:text-slate-300 tabular-nums">
                           {currentHHMM}
-                        </span>{' '}
-                        ({PROFILE_LABEL[activeProfile]})
+                        </span>
                       </p>
                       {isRingingTitle && (
                         <p className="text-xs font-semibold text-blue-600 dark:text-cyan-400 mt-2 font-mono tabular-nums">
@@ -3596,7 +3586,7 @@ export function ConsolePage({
                       </span>
                     </>
                   ) : (
-                    <span>{PROFILE_LABEL[activeProfile]} Schedule · {currentHHMM}</span>
+                    <span>All Schedules · {currentHHMM}</span>
                   )}
                 </div>
               </div>
@@ -3671,8 +3661,7 @@ export function ConsolePage({
                         {dCopy.noNextActivityAt}{' '}
                         <span className="font-mono font-semibold text-slate-700 dark:text-slate-300 tabular-nums">
                           {currentHHMM}
-                        </span>{' '}
-                        ({PROFILE_LABEL[activeProfile]})
+                        </span>
                       </p>
                     </div>
                   )}
@@ -4535,7 +4524,7 @@ export function ConsolePage({
             <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                  Active Mode:
+                  New Schedule Type:
                 </span>
                 <div className="inline-flex items-center gap-1 p-1 bg-slate-100 dark:bg-[#060B19] rounded-lg">
                   {(['Studying', 'Exams'] as ScheduleProfile[]).map((prof) => (
@@ -4553,6 +4542,9 @@ export function ConsolePage({
                     </button>
                   ))}
                 </div>
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  Both types run at their scheduled times.
+                </span>
                 {(() => {
                   const linkedEsp = devices.find(
                     (d) =>
@@ -4770,7 +4762,7 @@ export function ConsolePage({
                 <div className="flex items-center gap-2">
                   <span className="font-display font-bold text-slate-900 dark:text-white text-sm">
                     {selectedDay === 'All'
-                      ? `All Days · ${PROFILE_LABEL[activeProfile]}`
+                      ? 'All Scheduled Activities'
                       : `${WEEKDAY_FULL_LABELS[selectedDay]} Full Day Arrangement`}
                   </span>
                   {selectedDay !== 'All' && selectedDay === todayWeekday && (
@@ -4802,7 +4794,7 @@ export function ConsolePage({
                 ) : (
                   <span className="text-slate-500 dark:text-slate-400">
                     No slots scheduled for{' '}
-                    {selectedDay === 'All' ? 'this mode' : WEEKDAY_FULL_LABELS[selectedDay]}
+                    {selectedDay === 'All' ? 'this timetable' : WEEKDAY_FULL_LABELS[selectedDay]}
                   </span>
                 )}
               </div>
@@ -4898,9 +4890,15 @@ export function ConsolePage({
                           </td>
                           <td className="py-3.5 px-4">
                             <p className="font-medium text-slate-900 dark:text-white">{item.title}</p>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                            <span
+                              className={`mt-1 inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${
+                                item.profile === 'Exams'
+                                  ? 'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-800/70 dark:bg-amber-950/40 dark:text-amber-300'
+                                  : 'border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-800/70 dark:bg-blue-950/40 dark:text-blue-300'
+                              }`}
+                            >
                               {PROFILE_LABEL[item.profile]}
-                            </p>
+                            </span>
                           </td>
                           <td className="py-3.5 px-4 text-xs text-slate-600 dark:text-slate-300 whitespace-nowrap">
                             {item.profile === 'Exams' ? (
@@ -6598,12 +6596,9 @@ void checkOfflineSchedule() {
   String curStamp = String(dateBuf) + " " + String(hmBuf);
   if (curStamp == lastOnlineTriggerMinute) return; // Already fired via cloud command this minute
 
-  String activeProfile = cachedActiveProfile.length() > 0 ? cachedActiveProfile : String("Studying");
-
   for (int i = 0; i < offlineSlotCount; i++) {
     const OfflineBellSlot& s = offlineSlots[i];
     if (!s.enabled) continue;
-    if (strcmp(s.profile, activeProfile.c_str()) != 0) continue;
 
     // Day selections represent the start date; overnight end bells use the previous start date.
     bool overnight = strlen(s.endTime) == 5 && strcmp(s.endTime, s.time) < 0;

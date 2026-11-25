@@ -282,9 +282,7 @@ function evaluateAutomaticSchedules(): void {
       return slot.days.includes(WEEKDAY_NAMES[date.getUTCDay()]);
     };
 
-    const matchingSlots = record.schedules.filter(
-      (slot) => slot.enabled && slot.profile === record.activeProfile
-    );
+    const matchingSlots = record.schedules.filter((slot) => slot.enabled);
 
     matchingSlots.forEach((slot) => {
       let titleToRing: string | null = null;
@@ -915,7 +913,7 @@ async function startServer() {
       remainingMs: activeRing && cmd ? Math.max(0, cmd.expiresAtMs - nowMs) : 0,
       serverTimeMs: nowMs,
       timezoneOffsetMinutes: record.config.timezoneOffsetMinutes,
-      schedules: record.schedules.filter((s) => s.enabled && s.profile === record.activeProfile),
+      schedules: record.schedules.filter((s) => s.enabled),
     });
   });
 
